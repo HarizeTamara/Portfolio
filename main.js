@@ -36,17 +36,22 @@ for (let i = 0; i < testimonialsItem.length; i++) {
     })
 }
 
-//Activating close button in modal-testimonial
+//Ativando o botão fechar no modal-testimonial
 
 modalCloseBtn.addEventListener('click', testimonialsModalFunc);
 overlay.addEventListener('click', testimonialsModalFunc);
 
-//Activating Filter Select and filtering options
+//Habilitando seleção de filtros e opções de filtragem (portfolio)
+//data-select: Controla o dropdown para selecionar categorias.
+//data-select-item: Cada item no dropdown representa uma categoria.
+//data-select-value: Exibe o valor selecionado no dropdown.
+//data-filter-btn: Cada botão de filtro possui esse atributo no HTML.
+
 
 const select = document.querySelector('[data-select]');
 const selectItems = document.querySelectorAll('[data-select-item]');
 const selectValue = document.querySelector('[data-select-value]');
-const filterBtn = document.querySelectorAll('[data-filter-btn]');
+const filterBtn = document.querySelectorAll('[data-filter-btn]'); 
 
 select.addEventListener('click', function () {elementToggleFunc(this); });
 
@@ -60,41 +65,36 @@ for(let i = 0; i < selectItems.length; i++) {
 
     });
 }
-
+// Selecionar botões de filtro e itens do portfólio
+const filterBtns = document.querySelectorAll('[data-filter-btn]');
 const filterItems = document.querySelectorAll('[data-filter-item]');
 
-const filterFunc = function (selectedValue) {
-    for(let i = 0; i < filterItems.length; i++) {
-        if(selectedValue == "all") {
-            filterItems[i].classList.add('active');
-        } else if (selectedValue == filterItems[i].dataset.category) {
-            filterItems[i].classList.add('active');
+// Função para aplicar o filtro
+const filterFunc = (selectedCategory) => {
+    filterItems.forEach((item) => {
+        if (selectedCategory === "all" || item.dataset.category === selectedCategory) {
+            item.classList.add('active');
         } else {
-            filterItems[i].classList.remove('active');
+            item.classList.remove('active');
         }
-    }
-}
+    });
+};
 
-//Enabling filter button for larger screens 
+// Adicionar evento de clique aos botões de filtro
+filterBtns.forEach((btn) => {
+    btn.addEventListener('click', function () {
+        const selectedCategory = this.dataset.category;
 
-let lastClickedBtn = filterBtn[0];
-
-for (let i = 0; i < filterBtn.length; i++) {
-    
-    filterBtn[i].addEventListener('click', function() {
-
-        let selectedValue = this.innerText.toLowerCase();
-        selectValue.innerText = this.innerText;
-        filterFunc(selectedValue);
-
-        lastClickedBtn.classList.remove('active');
+        // Atualizar o botão ativo
+        filterBtns.forEach((button) => button.classList.remove('active'));
         this.classList.add('active');
-        lastClickedBtn = this;
 
-    })
-}
+        // Aplicar o filtro
+        filterFunc(selectedCategory);
+    });
+});
 
-// Enabling Contact Form
+// Enabling Contact Formulário
 
 const form = document.querySelector('[data-form]');
 const formInputs = document.querySelectorAll('[data-form-input]');

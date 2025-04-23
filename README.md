@@ -1,5 +1,5 @@
-- [ ] Corrigir o erro no layout das páginas "Resumo" e "Contato"
+- [x] Corrigir o erro no layout das páginas "Resumo" e "Contato"
 - [ ] Finalizar a pagina "Sobre"
-- [ ] Trocar os ícones do menu lateral
+- [x] Trocar os ícones do menu lateral
 - [ ] Alterar o telefone para whastapp
 - [ ] Verificar o formulário de contato

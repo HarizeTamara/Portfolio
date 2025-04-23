@@ -1545,16 +1545,15 @@
   @media (min-width: 1250px) {
   
       body::-webkit-scrollbar { width: 20px; }
-      body::-webkit-scrollbar-track { background: var(--smoky-black); }
+      body::-webkit-scrollbar-track { background: none; }
   
       body::-webkit-scrollbar-thumb {
           border: 5px solid var(--smoky-black);
-          background: hsla(0, 0%, 100%, .1);
-          border-radius: 20px;
-          box-shadow: inset 1px 1px 0 hsla(0, 0%, 100%, .11), inset -1px -1px 0 hsla(0, 0%, 100%, .11);
+          background: var(--stroke);
+          border-radius: 20px;;
       }
   
-      body::-webkit-scrollbar-thumb:hover { background: hsla(0, 0%, 100%, .15); }
+      body::-webkit-scrollbar-thumb:hover { background: hsla(0, 0%, 100%, 0.15); }
       body::-webkit-scrollbar-button { height: 60px; }
   
       .sidebar, article { width: 950px; }
