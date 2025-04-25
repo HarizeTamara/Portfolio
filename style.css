@@ -15,7 +15,7 @@
   .heart-switch svg {
     display: block;
   }
-  
+
   .heart-switch svg path {
     transition: stroke var(--duration), fill var(--duration);
   }
