@@ -1,7 +1,7 @@
 - [x] Corrigir o erro no layout das páginas "Resumo" e "Contato"
-- [ ] Finalizar a pagina "Sobre"
+- [x] Finalizar a pagina "Sobre"
 - [x] Trocar os ícones do menu lateral
 - [x] Criar a página de "Portfolio"
 - [x] Criar a página de "Resumo"
-- [ ] Alterar o telefone para whastapp
-- [ ] Verificar o formulário de contato
+- [x] Alterar o telefone para whastapp
+- [x] Verificar o formulário de contato
