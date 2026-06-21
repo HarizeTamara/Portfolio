@@ -27,15 +27,33 @@ const testimonialsModalFunc = function () {
 
 for (let i = 0; i < testimonialsItem.length; i++) {
     testimonialsItem[i].addEventListener('click', function () {
-        modalImg.src = this.querySelector('[data-testimonials-avatar]').src;
-        modalImg.alt = this.querySelector('[data-testimonials-avatar]').alt;
-        modalTitle.innerHTML = this.querySelector('[data-testimonials-title]').innerHTML;
-        modalText.innerHTML = this.querySelector('[data-testimonials-text]').innerHTML;
-
-        testimonialsModalFunc();
-    })
-}
-
+      // — preenche imagem, título e texto
+      modalImg.src   = this.querySelector('[data-testimonials-avatar]').src;
+      modalImg.alt   = this.querySelector('[data-testimonials-avatar]').alt;
+      modalTitle.innerHTML = this.querySelector('[data-testimonials-title]').innerHTML;
+      modalText.innerHTML  = this.querySelector('[data-testimonials-text]').innerHTML;
+  
+      // — AGORA preenche a data no modal
+      const modalDate = document.querySelector('[data-modal-date]');
+      const dateAttr  = this.getAttribute('data-testimonials-date');
+      if (modalDate && dateAttr) {
+        modalDate.setAttribute('datetime', dateAttr);
+        modalDate.innerText = formatarData(dateAttr);
+      }
+  
+      testimonialsModalFunc();
+    });
+  }
+  
+  function formatarData(data) {
+    const [ano, mes] = data.split('-');
+    const nomesMeses = [
+      "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
+      "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
+    ];
+    return `${nomesMeses[parseInt(mes,10) - 1]}, ${ano}`;
+  }
+  
 //Ativando o botão fechar no modal-testimonial
 
 modalCloseBtn.addEventListener('click', testimonialsModalFunc);
