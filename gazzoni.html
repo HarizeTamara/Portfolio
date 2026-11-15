@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harize Tamara - Gazzoni</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ===== Perfil Instagram Gazzoni ===== */
+    .ig {
+      --ig-bg: #ffffff;
+      --ig-text: #000000;
+      --ig-muted: #737373;
+      --ig-border: #dbdbdb;
+      --ig-btn: #efefef;
+      --ig-btn-hover: #dbdbdb;
+      --ig-link: #00376b;
+      max-width: 935px;
+      margin: 10px auto 30px;
+      background: var(--ig-bg);
+      color: var(--ig-text);
+      border: 1px solid var(--ig-border);
+      border-radius: 14px;
+      padding: 28px 20px 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 18px;
+      text-align: left;
+      overflow: hidden;
+    }
+    body.dark .ig {
+      --ig-bg: #000000;
+      --ig-text: #f5f5f5;
+      --ig-muted: #a8a8a8;
+      --ig-border: #262626;
+      --ig-btn: #363636;
+      --ig-btn-hover: #262626;
+      --ig-link: #e0f1ff;
+    }
+    .ig button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+    .ig-header { display: flex; align-items: center; gap: 28px; padding: 0 0 0 12px; margin-bottom: 30px; }
+    .ig-avatar-ring {
+      flex: 0 0 auto; width: 150px; height: 150px; border-radius: 50%; padding: 4px;
+      background: conic-gradient(from 210deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75);
+    }
+    .ig-avatar-ring.seen { background: var(--ig-border); }
+    .ig-avatar {
+      width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--ig-bg);
+      overflow: hidden; background: #f2f2f2; display: block; padding: 0;
+    }
+    .ig-avatar img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.25); }
+    .ig-info { flex: 1; min-width: 0; }
+    .ig-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; margin-bottom: 18px; }
+    .ig-username { font-size: 20px; line-height: 25px; font-weight: 400; margin: 0 8px 0 0; color: var(--ig-text); }
+    .ig-verified { width: 18px; height: 18px; color: #0095f6; margin-left: -12px; margin-right: 6px; }
+    .ig-btn {
+      background: var(--ig-btn) !important; border-radius: 8px; padding: 7px 16px;
+      font-weight: 600 !important; font-size: 14px; line-height: 18px;
+    }
+    .ig-btn:hover { background: var(--ig-btn-hover) !important; }
+    .ig-btn.primary { background: #0095f6 !important; color: #fff !important; }
+    .ig-btn.primary:hover { background: #1877f2 !important; }
+    .ig-stats { display: flex; gap: 40px; list-style: none; padding: 0; margin: 0 0 18px; font-size: 16px; }
+    .ig-stats b { font-weight: 600; }
+    .ig-bio { margin: 0; }
+    .ig-bio .name { font-weight: 600; display: block; }
+    .ig-bio .cat { color: var(--ig-muted); display: block; }
+    .ig-bio a { color: var(--ig-link); font-weight: 600; text-decoration: none; }
+    .ig-highlights { display: flex; gap: 32px; padding: 0 12px 34px; overflow-x: auto; scrollbar-width: none; }
+    .ig-highlights::-webkit-scrollbar { display: none; }
+    .ig-hl { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 87px; flex: 0 0 auto; }
+    .ig-hl-ring { width: 87px; height: 87px; border-radius: 50%; padding: 3px; border: 1px solid var(--ig-border); }
+    .ig-hl-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+    .ig-hl span { font-size: 12px; font-weight: 600; max-width: 87px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .ig-tabs { display: flex; justify-content: center; gap: 60px; border-top: 1px solid var(--ig-border); margin: 0 -20px; }
+    .ig-tab {
+      display: flex; align-items: center; gap: 6px; height: 52px; margin-top: -1px;
+      font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--ig-muted); border-top: 1px solid transparent;
+    }
+    .ig-tab.active { color: var(--ig-text) !important; border-top-color: var(--ig-text); }
+    button.ig-tab { padding: 0; color: var(--ig-muted) !important; border-top: 1px solid transparent; border-radius: 0; }
+    button.ig-tab.active { border-top-color: var(--ig-text); }
+    .ig-grid-scroll[hidden] { display: none !important; }
+    .ig-grid-reels .ig-post { aspect-ratio: 9 / 16; }
+    .ig-reel-views { position: absolute; left: 8px; bottom: 8px; z-index: 1; color: #fff; font-size: 20px; display: flex; filter: drop-shadow(0 0 2px rgba(0,0,0,.6)); }
+    .ig-tab ion-icon { font-size: 13px; }
+
+    .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 0 -20px; }
+    .ig-post { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--ig-btn); padding: 0 !important; display: block; width: 100%; }
+    .ig-post img, .ig-post video { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+    .ig-reel-badge { position: absolute; top: 8px; right: 8px; font-size: 20px; color: #fff; z-index: 1; filter: drop-shadow(0 0 2px rgba(0,0,0,.6)); }
+    .ig-grid-scroll {
+      max-height: min(720px, 75vh); overflow-y: auto; overscroll-behavior: contain;
+      margin: 0 -20px; scrollbar-width: thin; scrollbar-color: var(--ig-muted) transparent;
+    }
+    .ig-grid-scroll .ig-grid { margin: 0; }
+    .ig-grid-scroll::-webkit-scrollbar { width: 8px; }
+    .ig-grid-scroll::-webkit-scrollbar-thumb { background: var(--ig-muted); border-radius: 8px; }
+    .ig-grid-scroll::-webkit-scrollbar-track { background: transparent; }
+    .ig-modal-media video { max-height: calc(100vh - 80px); width: 100%; display: block; background: #000; }
+    .ig-post::after {
+      content: ""; position: absolute; inset: 0; background: rgba(0,0,0,.3); opacity: 0; transition: opacity .2s;
+    }
+    .ig-post:hover::after, .ig-post:focus-visible::after { opacity: 1; }
+
+    /* Visualizador de posts */
+    .ig-modal {
+      position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,.75);
+      display: flex; align-items: center; justify-content: center; padding: 40px 60px;
+    }
+    .ig-modal[hidden], .ig-story[hidden],
+    .ig [hidden], .ig-story [hidden] { display: none !important; }
+    .ig-modal-card {
+      display: flex; background: var(--ig-bg); color: var(--ig-text); border-radius: 4px; overflow: hidden;
+      max-height: calc(100vh - 80px); max-width: 1000px; width: 100%;
+    }
+    .ig-modal-media { flex: 1 1 auto; background: #000; display: flex; align-items: center; justify-content: center; min-width: 0; }
+    .ig-modal-media img { max-height: calc(100vh - 80px); width: 100%; object-fit: contain; display: block; }
+    .ig-modal-side { flex: 0 0 340px; display: flex; flex-direction: column; border-left: 1px solid var(--ig-border); }
+    .ig-modal-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--ig-border); font-weight: 600; }
+    .ig-mini { width: 32px; height: 32px; border-radius: 50%; overflow: hidden; background: #f2f2f2; flex: 0 0 auto; }
+    .ig-mini img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.25); }
+    .ig-modal-body { flex: 1; padding: 16px; overflow-y: auto; }
+    .ig-modal-body p { margin: 0; }
+    .ig-modal-body .tag { color: var(--ig-link); }
+    .ig-modal-actions { border-top: 1px solid var(--ig-border); padding: 8px 12px 14px; }
+    .ig-icons { display: flex; gap: 14px; font-size: 26px; }
+    .ig-icons .save { margin-left: auto; }
+    .ig-icons button { padding: 0; display: flex; }
+    .ig-icons .liked { color: #ff3040; }
+    .ig-modal-actions small { display: block; color: var(--ig-muted); font-size: 10px; letter-spacing: .2px; text-transform: uppercase; margin-top: 8px; }
+    .ig-close { position: fixed; top: 14px; right: 18px; color: #fff; font-size: 34px; background: none; border: 0; cursor: pointer; z-index: 2002; display: flex; }
+    .ig-nav {
+      position: fixed; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,.85); color: #000; border: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; z-index: 2002;
+    }
+    .ig-nav.prev { left: 14px; } .ig-nav.next { right: 14px; }
+    .ig-nav[disabled] { visibility: hidden; }
+
+    /* Visualizador de stories */
+    .ig-story { position: fixed; inset: 0; z-index: 2000; background: #1a1a1a; display: flex; align-items: center; justify-content: center; }
+    .ig-story-frame {
+      position: relative; height: min(92vh, 860px); aspect-ratio: 9 / 16; max-width: 100vw;
+      border-radius: 8px; overflow: hidden; background: #000;
+    }
+    .ig-story-frame > img, .ig-story-frame > video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ig-story-top { position: absolute; top: 0; left: 0; right: 0; padding: 12px 12px 30px; background: linear-gradient(rgba(0,0,0,.45), transparent); color: #fff; }
+    .ig-bars { display: flex; gap: 4px; margin-bottom: 10px; }
+    .ig-bar { flex: 1; height: 2px; background: rgba(255,255,255,.35); border-radius: 2px; overflow: hidden; }
+    .ig-bar i { display: block; height: 100%; width: 0; background: #fff; }
+    .ig-story-user { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .ig-story-user .time { font-weight: 400; opacity: .7; }
+    .ig-story-tap { position: absolute; top: 0; bottom: 0; width: 40%; background: none; border: 0; cursor: pointer; }
+    .ig-story-tap.left { left: 0; } .ig-story-tap.right { right: 0; width: 60%; }
+
+    @media (max-width: 735px) {
+      .ig { padding: 16px 14px 0; border-radius: 10px; }
+      .ig-header { gap: 20px; padding: 0; margin-bottom: 16px; align-items: flex-start; }
+      .ig-avatar-ring { width: 86px; height: 86px; padding: 3px; }
+      .ig-avatar { border-width: 3px; }
+      .ig-username { font-size: 18px; }
+      .ig-row { margin-bottom: 12px; }
+      .ig-stats { gap: 18px; font-size: 14px; margin-bottom: 12px; }
+      .ig-highlights { gap: 14px; padding: 4px 0 20px; }
+      .ig-hl, .ig-hl-ring { width: 64px; } .ig-hl-ring { height: 64px; }
+      .ig-tabs { gap: 0; justify-content: space-around; margin: 0 -14px; }
+      .ig-tab span { display: none; } .ig-tab ion-icon { font-size: 24px; }
+      .ig-grid { gap: 2px; }
+      .ig-grid-scroll { margin: 0 -14px; max-height: 70vh; }
+      .ig-modal-media video { max-height: 65vh; }
+      .ig-modal { padding: 0; }
+      .ig-modal-card { flex-direction: column; max-height: 100vh; border-radius: 0; height: 100%; }
+      .ig-modal-media { flex: 0 1 auto; } .ig-modal-media img { max-height: 65vh; }
+      .ig-modal-side { flex: 1 1 auto; border-left: 0; }
+      .ig-story-frame { height: 100%; border-radius: 0; }
+    }
+  </style>
+  <link rel="shortcut icon" href="assets/img/logo icon.png" type="image/x-icon">
+</head>
+<body>
+  <!-- Modo Claro e escuro -->
+  <label class="heart-switch top-right">
+    <input type="checkbox">
+    <svg viewBox="0 0 33 23" fill="white">
+      <path d="M23.5,0.5 C28.4705627,0.5 32.5,4.52943725 32.5,9.5 C32.5,16.9484448 21.46672,22.5 16.5,22.5 C11.53328,22.5 0.5,16.9484448 0.5,9.5 C0.5,4.52952206 4.52943725,0.5 9.5,0.5 C12.3277083,0.5 14.8508336,1.80407476 16.5007741,3.84362242 C18.1491664,1.80407476 20.6722917,0.5 23.5,0.5 Z"></path>
+    </svg>
+  </label>
+
+  <main>
+    <!-- Coluna Esquerda Intacta e Fixa -->
+    <aside class="sidebar" data-sidebar>
+        <div class="sidebar-info">
+            <figure class="avatar-box">
+                <img src="assets/img/avatar.webp" alt="avatar" width="80">
+            </figure>
+
+            <div class="info-content">
+                <h1 class="name" title="Harize Tamara">Harize Tamara</h1>
+                <p class="title">Publicitária</p>
+            </div>
+
+            <button class="info-more-btn" data-sidebar-btn>
+                <span>Mostrar Contatos</span>
+                <ion-icon name="chevron-down"></ion-icon>
+            </button>
+        </div>
+
+        <div class="sidebar-info-more">
+            <div class="separator"></div>
+
+            <ul class="contacts-list">
+                <li class="contact-item">
+                    <div class="icon-box">
+                        <ion-icon name="mail-outline"></ion-icon>
+                    </div>
+                    <div class="contact-info">
+                        <p class="contact-title">E-mail</p>
+                        <a href="mailto:harizetamara@gmail.com" class="contact-link">harizetamara.com</a>
+                    </div>
+                </li>
+
+                <li class="contact-item">
+                    <div class="icon-box">
+                        <ion-icon name="logo-whatsapp"></ion-icon>
+                    </div>
+                    <div class="contact-info">
+                        <p class="contact-title">Telefone</p>
+                        <a href="https://whatsa.me/5567991123030" class="contact-link"> (67) 99112-3030</a>
+                    </div>
+                </li>
+
+                <li class="contact-item">
+                    <div class="icon-box">
+                        <ion-icon name="calendar-outline"></ion-icon>
+                    </div>
+                    <div class="contact-info">
+                        <p class="contact-title">Aniversário</p>
+                        <time datetime="1982-06-23"> 13 Dezembro 1994</time>
+                    </div>
+                </li>
+
+                <li class="contact-item">
+                    <div class="icon-box">
+                        <ion-icon name="location-outline"></ion-icon>
+                    </div>
+                    <div class="contact-info">
+                        <p class="contact-title">Localização</p>
+                        <address>Campo Grande - MS</address>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="separator"></div>
+
+            <ul class="social-list">
+                <li class="social-item"><a href="https://www.behance.net/HarizeTamara" class="social-link"><ion-icon name="logo-behance"></ion-icon></a></li>
+                <li class="social-item"><a href="https://www.linkedin.com/in/harizetamara/" target="_blank" class="social-link"><ion-icon name="logo-linkedin"></ion-icon></a></li> 
+                <li class="social-item"><a href="https://github.com/HarizeTamara" target="_blank" class="social-link"><ion-icon name="logo-github"></ion-icon></a></li> 
+                <li class="social-item"><a href="https://www.instagram.com/harizetamara/" target="_blank" class="social-link"><ion-icon name="logo-instagram"></ion-icon></a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <div class="main-content">
+        <!-- Menu Superior Fixo e Sem Alterações -->
+       <nav class="navbar">
+            <ul class="navbar-list">
+                <li class="navbar-item"><button data-page="about" class="navbar-link" data-nav-link>Sobre</button></li>
+                <li class="navbar-item"><button data-page="resume" class="navbar-link" data-nav-link>Resumo</button></li>
+                <li class="navbar-item"><button class="navbar-link active" data-page="portfolio" data-nav-link>Portfólio</button></li>
+                <li class="navbar-item"><button data-page="contact" class="navbar-link" data-nav-link>Contato</button></li>
+            </ul>
+        </nav>
+
+        <!-- Bloco Principal com as Modificações Solicitadas -->
+        <article class="about active" data-page="gazzoni">
+            <header class="article-title">
+                <!-- Título principal -->
+                <h2 class="h2">Gazzoni</h2>
+                <!-- Subtítulo acima do traço roxo, com cor branca baseada no CSS -->
+                <p style="margin-top: 5px; font-size: var(--fs6); font-weight: var(--fw400); color: var(--white2); text-transform: none;">Distribuidora de Peças</p>
+            </header>
+
+            <!-- Apenas a descrição e nada mais -->
+            <section class="about-text" style="margin-top: 30px;">
+                <p>Como Assistente de Marketing na Gazzoni Distribuidora de Peças, atuo diretamente no desenvolvimento e execução de estratégias de comunicação visual e promocional para a empresa. Minhas responsabilidades incluem a atualização contínua de fotos de produtos e componentes no sistema técnico, garantindo a fidelidade e qualidade visual para consultas profissionais.</p>
+                <p>Também sou responsável pela criação de encartes internos e externos de caráter técnico ou institucional, além de planejar e gerenciar campanhas voltadas para o público interno (endomarketing) e de mercado. Adicionalmente, realizo o design de artes otimizadas e atrativas para as redes sociais oficiais, como o Instagram e o Facebook, impulsionando a presença digital da marca e o engajamento com clientes e parceiros do setor automotivo.</p>
+            </section>
+
+            <!-- Perfil do Instagram da Gazzoni -->
+            <section class="ig" aria-label="Perfil do Instagram da Gazzoni">
+                <header class="ig-header">
+                    <div class="ig-avatar-ring" id="igAvatarRing">
+                        <button class="ig-avatar" id="igAvatar" aria-label="Ver stories da Gazzoni">
+                            <img src="assets/img/Gazzoni/Instagram/feed_gazzoni_0.png" alt="Logo Gazzoni">
+                        </button>
+                    </div>
+                    <div class="ig-info">
+                        <div class="ig-row">
+                            <h3 class="ig-username">gazzonidistribuidora</h3>
+                            <button class="ig-btn primary" id="igFollow">Seguir</button>
+                            <button class="ig-btn">Enviar mensagem</button>
+                        </div>
+                        <!-- Edite os números de seguidores/seguindo abaixo -->
+                        <ul class="ig-stats">
+                            <li><b id="igPostCount">0</b> publicações</li>
+                            <li><b>5.533</b> seguidores</li>
+                            <li><b>4.109</b> seguindo</li>
+                        </ul>
+                        <p class="ig-bio">
+                            <span class="name">Gazzoni Distribuidora de Peças</span>
+                            <span class="cat">Produto/serviço</span>
+                            Há 46 anos movendo o Brasil com qualidade.<br>
+                            🚚 Especialistas em: Direção Hidráulica, Diesel, Hidráulico pesado e Transmissão.<br>
+                            📍Atendemos todo o país!<br>
+                            Rua Ceará, 2073 - Vila Célia, Campo Grande, Brazil 79020360<br>
+                            <a href="https://ig.rdstation.com/gazzonidistribuidora" target="_blank" rel="noopener">ig.rdstation.com/gazzonidistribuidora</a>
+                        </p>
+                    </div>
+                </header>
+
+                <div class="ig-highlights" id="igHighlights"></div>
+
+                <nav class="ig-tabs" role="tablist">
+                    <button class="ig-tab active" role="tab" aria-selected="true" data-ig-tab="igPanelPosts"><ion-icon name="grid-outline"></ion-icon><span>Publicações</span></button>
+                    <button class="ig-tab" role="tab" aria-selected="false" data-ig-tab="igPanelReels"><ion-icon name="film-outline"></ion-icon><span>Reels</span></button>
+                    <div class="ig-tab" aria-hidden="true"><ion-icon name="person-circle-outline"></ion-icon><span>Marcados</span></div>
+                </nav>
+
+                <div class="ig-grid-scroll" id="igPanelPosts" role="tabpanel">
+                    <div class="ig-grid" id="igGrid"></div>
+                </div>
+                <div class="ig-grid-scroll" id="igPanelReels" role="tabpanel" hidden>
+                    <div class="ig-grid ig-grid-reels" id="igReelsGrid"></div>
+                </div>
+            </section>
+
+            <!-- Visualizador de post -->
+            <div class="ig ig-modal" id="igModal" hidden role="dialog" aria-modal="true" aria-label="Publicação" style="max-width:none;margin:0;border:0;border-radius:0;background:rgba(0,0,0,.75);">
+                <button class="ig-close" data-ig-close aria-label="Fechar"><ion-icon name="close-outline"></ion-icon></button>
+                <button class="ig-nav prev" id="igPrev" aria-label="Anterior"><ion-icon name="chevron-back-outline"></ion-icon></button>
+                <button class="ig-nav next" id="igNext" aria-label="Próxima"><ion-icon name="chevron-forward-outline"></ion-icon></button>
+                <div class="ig-modal-card">
+                    <div class="ig-modal-media">
+                        <img id="igModalImg" src="" alt="">
+                        <video id="igModalVideo" controls playsinline loop hidden></video>
+                    </div>
+                    <div class="ig-modal-side">
+                        <div class="ig-modal-head">
+                            <div class="ig-mini"><img src="assets/img/Gazzoni/Instagram/feed_gazzoni_0.png" alt=""></div>
+                            gazzonidistribuidora
+                        </div>
+                        <div class="ig-modal-body">
+                            <p><b>gazzonidistribuidora</b> <span id="igCaption"></span></p>
+                        </div>
+                        <div class="ig-modal-actions">
+                            <div class="ig-icons">
+                                <button id="igLike" aria-label="Curtir"><ion-icon name="heart-outline"></ion-icon></button>
+                                <button aria-label="Comentar"><ion-icon name="chatbubble-outline"></ion-icon></button>
+                                <button aria-label="Compartilhar"><ion-icon name="paper-plane-outline"></ion-icon></button>
+                                <button class="save" id="igSave" aria-label="Salvar"><ion-icon name="bookmark-outline"></ion-icon></button>
+                            </div>
+                            <small>Arte desenvolvida por Harize Tamara</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualizador de stories -->
+            <div class="ig-story" id="igStory" hidden role="dialog" aria-modal="true" aria-label="Stories">
+                <button class="ig-close" data-ig-close aria-label="Fechar"><ion-icon name="close-outline"></ion-icon></button>
+                <div class="ig-story-frame">
+                    <img id="igStoryImg" src="" alt="">
+                    <video id="igStoryVideo" playsinline hidden></video>
+                    <div class="ig-story-top">
+                        <div class="ig-bars" id="igBars"></div>
+                        <div class="ig-story-user">
+                            <div class="ig-mini"><img src="assets/img/Gazzoni/Instagram/feed_gazzoni_0.png" alt=""></div>
+                            <span>gazzonidistribuidora</span> <span class="time" id="igStoryLabel"></span>
+                        </div>
+                    </div>
+                    <button class="ig-story-tap left" id="igStoryPrev" aria-label="Story anterior"></button>
+                    <button class="ig-story-tap right" id="igStoryNext" aria-label="Próximo story"></button>
+                </div>
+            </div>
+
+            <script>
+            (function () {
+                var BASE = 'assets/img/Gazzoni/Instagram/';
+                var src = function (p) { return encodeURI(BASE + p); };
+
+                // Legendas específicas; os demais posts recebem "Código: X" a partir do nome do arquivo
+                var CAPTIONS = {
+                    'Feed/10 de Maio  ⠂ Feed.png': 'Homenagem ao Dia das Mães 💐 <span class="tag">#gazzoni</span>',
+                    'Feed/10 de Maio  ⠂ Feed INTERNO.png': 'Dia das Mães • Comunicação interna 💐 <span class="tag">#endomarketing</span>',
+                    'Feed/1 de Maio  ⠂ Feed.mp4': '1º de Maio • Dia do Trabalhador <span class="tag">#gazzoni</span>',
+                    'Feed/Reparos Bombas Bosch - Feed.png': 'Reparos para bombas Bosch. Consulte nossa equipe! <span class="tag">#bosch #pecas</span>',
+                    'Feed/Feed . 80142988058F4.png': 'Código: 80142988058F4 • Reparo caixa de direção hidráulica MB / VW | Caixa 8014 <span class="tag">#bosch</span>',
+                    'Feed/Feed . 45180139168F4.png': 'Código: 45180139168F4 • Reparo caixa de direção hidráulica MB 1113/1313 | Caixa 8063 <span class="tag">#bosch</span>'
+                };
+                function caption(f) {
+                    if (CAPTIONS[f]) return CAPTIONS[f];
+                    var code = f.split('/').pop()
+                        .replace(/\.(png|jpe?g|mp4)$/i, '')
+                        .replace(/^(\d{2}-\d{2}-\d{2}\s+)?((feed|stories)\s*[-.]\s*)?/i, '')
+                        .trim();
+                    var extra = /^Feed\/Feed \. /.test(f) ? ' • Reparo caixa de direção hidráulica <span class="tag">#bosch</span>' : ' <span class="tag">#gazzoni #pecas</span>';
+                    return 'Código: ' + code + extra;
+                }
+                function toItems(files) {
+                    return files.map(function (f) { return { f: f, v: /\.mp4$/i.test(f), c: caption(f) }; });
+                }
+
+                // Feed: mais recente primeiro
+                var FEED = toItems([
+                    'Feed/10 de Maio  ⠂ Feed.png',
+                    'Feed/10 de Maio  ⠂ Feed INTERNO.png',
+                    'Feed/1 de Maio  ⠂ Feed.mp4',
+                    'Feed/Feed-11190005.png',
+                    'Feed/Feed-250MTG280.png',
+                    'Feed/Feed-28307309-13B2.png',
+                    'Feed/feed-4510184.png',
+                    'Feed/feed-57039K.png',
+                    'Feed/feed-70423-LBE.png',
+                    'Feed/Feed-7115806000.png',
+                    'Feed/Feed-7135-588-13B2.png',
+                    'Feed/feed-7185-127U-13B1.png',
+                    'Feed/feed-7360-002.png',
+                    'Feed/feed-80142988058F4.png',
+                    'Feed/Feed-80900161868F4.png',
+                    'Feed/feed-CX201427.png',
+                    'Feed/feed-GIOSPC160ON.png',
+                    'Feed/Feed-KS00001393002.png',
+                    'Feed/Feed-L322PBC-13B2.png',
+                    'Feed/feed-R04601D-13B2.png',
+                    'Feed/feed-V8861A550W-13B1.png',
+                    'Feed/Reparos Bombas Bosch - Feed.png',
+                    'Feed/Feed . 80986339088F4.png',
+                    'Feed/Feed . 80976339078F4.png',
+                    'Feed/Feed . 80956339058F4.png',
+                    'Feed/Feed . 80906339008F4.png',
+                    'Feed/Feed . 80142988058F4.png',
+                    'Feed/Feed . 45180139168F4.png'
+                ]);
+
+                // Destaques (apenas capas, na mesma ordem do perfil real)
+                var HIGHLIGHTS = [
+                    { t: 'Fale conosco', img: 'Destaque/Fale Colosco.jpg' },
+                    { t: 'ALERTA', img: 'Destaque/Alerta.jpg' },
+                    { t: 'Transmissão Aut', img: 'Destaque/Transmissão.jpg' },
+                    { t: 'Direção Hid.', img: 'Destaque/Direção Hid..jpg' },
+                    { t: 'Hid. Pesado', img: 'Destaque/Hid. Pesado.jpg' },
+                    { t: 'Diesel', img: 'Destaque/Diesel.jpg' }
+                ];
+
+                // Stories (abertos ao clicar na foto de perfil)
+                var ALL_STORIES = [
+                    'Storys/story_gazzoni_0.png',
+                    'Storys/Dia do Trabalhador.png',
+                    'Storys/1 de Maio  ⠂ Stories.png',
+                    'Storys/Stories 1 de Maio.mp4',
+                    'Storys/08-05-26 Dia do Profissional de Marketing.png',
+                    'Storys/10 de Maio  ⠂ Stories.png',
+                    'Storys/10 de Maio  ⠂ Stories INTERNO.png',
+                    'Storys/11-05-26 Stories . 30034.png',
+                    'Storys/13-05-26 Stories . 00811040798F4.png',
+                    'Storys/15-05-26 Stories . 7760000023.png',
+                    'Storys/10-07 Dia do Comerciante.png',
+                    'Storys/11-07 Stories de Aniversário FIAT.png',
+                    'Storys/14-07 Dia do Engenheiro de Agricultura.png',
+                    'Storys/15-07 Dia do Pecuarista.png',
+                    'Storys/25-07 Dia do Motorista.png',
+                    'Storys/28-07 Dia do Agricultor.png',
+                    'Storys/02-348244.png',
+                    'Storys/103874-000.png',
+                    'Storys/11126003.png',
+                    'Storys/11186657.png',
+                    'Storys/11191050.png',
+                    'Storys/7673260900.png',
+                    'Storys/7673260904.png',
+                    'Storys/7684955990.png',
+                    'Storys/7685955139.png',
+                    'Storys/7723043558.png',
+                    'Storys/BA Informativo.png',
+                    'Storys/CONJ E PISTÃO.png',
+                    'Storys/Encarte Interno  - 7115486802 e 7182916801.png',
+                    'Storys/Encarte Interno  - 7117136010 e 7117206010_.png',
+                    'Storys/GBD8NN600KB.png',
+                    'Storys/GDS50.png',
+                    'Storys/Independencia da BA - Comercial.png',
+                    'Storys/Informativo - Loja 13.png',
+                    'Storys/Reparos Bombas Bosch - Stories.png',
+                    'Storys/Stories . 45180139168F4.png',
+                    'Storys/Stories . 7115486802.png',
+                    'Storys/Stories . 7115546000.png',
+                    'Storys/Stories . 7117136010.png',
+                    'Storys/Stories . 7117206010.png',
+                    'Storys/Stories . 7182916801.png',
+                    'Storys/Stories . 8000128.png',
+                    'Storys/Stories . 80142988058F4.png',
+                    'Storys/Stories . 80906339008F4.png',
+                    'Storys/Stories . 80956339058F4.png',
+                    'Storys/Stories . 80976339078F4.png',
+                    'Storys/Stories . 80986339088F4.png',
+                    'Storys/Stories-11190005.png',
+                    'Storys/Stories-250MTG280.png',
+                    'Storys/Stories-28307309-13B2.png',
+                    'Storys/Stories-4400044.png',
+                    'Storys/Stories-4400109.png',
+                    'Storys/Stories-4460683.png',
+                    'Storys/Stories-4460684.png',
+                    'Storys/Stories-4460890.png',
+                    'Storys/Stories-4510018.png',
+                    'Storys/Stories-4510184.png',
+                    'Storys/stories-57039K.png',
+                    'Storys/stories-70423-LBE.png',
+                    'Storys/Stories-7115806000.png',
+                    'Storys/Stories-7135-588-13B2.png',
+                    'Storys/stories-7185-127U-13B1.png',
+                    'Storys/stories-7360-002.png',
+                    'Storys/stories-80142988058F4.png',
+                    'Storys/Stories-80900161868F4.png',
+                    'Storys/Stories-8700008.png',
+                    'Storys/Stories-8700013.png',
+                    'Storys/Stories-9008000-0121.png',
+                    'Storys/stories-CX201427.png',
+                    'Storys/stories-GIOSPC160ON.png',
+                    'Storys/Stories-KS00001393002.png',
+                    'Storys/Stories-L322PBC-13B2.png',
+                    'Storys/stories-R04601D-13B2.png',
+                    'Storys/stories-V8861A550W-13B1.png'
+                ];
+
+                // Reels (mais recente primeiro)
+                var REELS = toItems([
+                    'Reels/14-05-26 45340006727RG.mp4',
+                    'Reels/12-05-26  07701981348F4.mp4'
+                ]);
+
+                var $ = function (id) { return document.getElementById(id); };
+
+                // ----- Grade -----
+                $('igPostCount').textContent = FEED.length;
+                FEED.forEach(function (p, i) {
+                    var b = document.createElement('button');
+                    b.className = 'ig-post';
+                    b.setAttribute('aria-label', 'Abrir publicação ' + (i + 1));
+                    b.innerHTML = p.v
+                        ? '<video muted playsinline preload="metadata" src="' + src(p.f) + '#t=0.5"></video><ion-icon class="ig-reel-badge" name="film"></ion-icon>'
+                        : '<img loading="lazy" alt="" src="' + src(p.f) + '">';
+                    b.addEventListener('click', function () { openPost(i, FEED); });
+                    $('igGrid').appendChild(b);
+                });
+
+                // ----- Reels -----
+                REELS.forEach(function (p, i) {
+                    var b = document.createElement('button');
+                    b.className = 'ig-post ig-reel';
+                    b.setAttribute('aria-label', 'Abrir reel ' + (i + 1));
+                    b.innerHTML = (p.v
+                        ? '<video muted playsinline loop preload="metadata" src="' + src(p.f) + '#t=0.5"></video>'
+                        : '<img loading="lazy" alt="" src="' + src(p.f) + '">')
+                        + '<span class="ig-reel-views"><ion-icon name="play-outline"></ion-icon></span>';
+                    var v = b.querySelector('video');
+                    if (v) {
+                        b.addEventListener('mouseenter', function () { v.play().catch(function () {}); });
+                        b.addEventListener('mouseleave', function () { v.pause(); });
+                    }
+                    b.addEventListener('click', function () { if (v) v.pause(); openPost(i, REELS); });
+                    $('igReelsGrid').appendChild(b);
+                });
+
+                // ----- Abas -----
+                var tabs = document.querySelectorAll('[data-ig-tab]');
+                tabs.forEach(function (t) {
+                    t.addEventListener('click', function () {
+                        tabs.forEach(function (o) {
+                            var on = o === t;
+                            o.classList.toggle('active', on);
+                            o.setAttribute('aria-selected', on);
+                            $(o.dataset.igTab).hidden = !on;
+                        });
+                    });
+                });
+
+                // ----- Destaques -----
+                HIGHLIGHTS.forEach(function (h) {
+                    var d = document.createElement('div');
+                    d.className = 'ig-hl';
+                    d.innerHTML = '<div class="ig-hl-ring"><img alt="" src="' + src(h.img) + '"></div><span></span>';
+                    d.querySelector('span').textContent = h.t;
+                    $('igHighlights').appendChild(d);
+                });
+
+                // ----- Modal de post -----
+                var cur = 0, curList = FEED, modal = $('igModal');
+                function openPost(i, list) {
+                    if (list) curList = list;
+                    cur = i;
+                    var item = curList[i];
+                    var vid = $('igModalVideo'), img = $('igModalImg');
+                    vid.pause();
+                    if (item.v) {
+                        img.hidden = true; img.removeAttribute('src');
+                        vid.hidden = false; vid.src = src(item.f);
+                        vid.play().catch(function () {});
+                    } else {
+                        vid.hidden = true; vid.removeAttribute('src'); vid.load();
+                        img.hidden = false; img.src = src(item.f);
+                    }
+                    $('igCaption').innerHTML = item.c;
+                    $('igPrev').disabled = i === 0;
+                    $('igNext').disabled = i === curList.length - 1;
+                    $('igLike').classList.remove('liked');
+                    $('igLike').firstElementChild.setAttribute('name', 'heart-outline');
+                    $('igSave').firstElementChild.setAttribute('name', 'bookmark-outline');
+                    modal.hidden = false;
+                    document.body.style.overflow = 'hidden';
+                }
+                function closeAll() {
+                    modal.hidden = true;
+                    $('igModalVideo').pause();
+                    stopStory();
+                    $('igStory').hidden = true;
+                    document.body.style.overflow = '';
+                }
+                $('igPrev').addEventListener('click', function () { if (cur > 0) openPost(cur - 1); });
+                $('igNext').addEventListener('click', function () { if (cur < curList.length - 1) openPost(cur + 1); });
+                modal.addEventListener('click', function (e) { if (e.target === modal) closeAll(); });
+                $('igLike').addEventListener('click', function () {
+                    var on = this.classList.toggle('liked');
+                    this.firstElementChild.setAttribute('name', on ? 'heart' : 'heart-outline');
+                });
+                $('igSave').addEventListener('click', function () {
+                    var ic = this.firstElementChild;
+                    ic.setAttribute('name', ic.getAttribute('name') === 'bookmark' ? 'bookmark-outline' : 'bookmark');
+                });
+                document.querySelectorAll('[data-ig-close]').forEach(function (b) { b.addEventListener('click', closeAll); });
+
+                // ----- Stories -----
+                var DURATION = 5000, list = [], si = 0, timer = null, start = 0, raf = null;
+                function openStory(items, label) {
+                    list = items; si = 0;
+                    $('igStoryLabel').textContent = label || '';
+                    $('igBars').innerHTML = items.map(function () { return '<div class="ig-bar"><i></i></div>'; }).join('');
+                    $('igStory').hidden = false;
+                    document.body.style.overflow = 'hidden';
+                    showStory();
+                }
+                function showStory() {
+                    stopStory();
+                    var img = $('igStoryImg'), vid = $('igStoryVideo');
+                    var isVideo = /\.mp4$/i.test(list[si]);
+                    var next = list[si + 1];
+                    if (next && !/\.mp4$/i.test(next)) new Image().src = src(next); // pré-carrega o próximo
+                    var bars = $('igBars').children;
+                    for (var k = 0; k < bars.length; k++) bars[k].firstChild.style.width = k < si ? '100%' : '0';
+
+                    if (isVideo) {
+                        img.hidden = true;
+                        vid.hidden = false;
+                        vid.src = src(list[si]);
+                        vid.currentTime = 0;
+                        vid.play().catch(function () {});
+                        (function tick() {
+                            var p = vid.duration ? Math.min(vid.currentTime / vid.duration, 1) : 0;
+                            bars[si].firstChild.style.width = (p * 100) + '%';
+                            if (vid.ended) nextStory(); else raf = requestAnimationFrame(tick);
+                        })();
+                        return;
+                    }
+
+                    img.hidden = false;
+                    img.src = src(list[si]);
+                    start = performance.now();
+                    (function tick(now) {
+                        var p = Math.min((now - start) / DURATION, 1);
+                        bars[si].firstChild.style.width = (p * 100) + '%';
+                        if (p < 1) raf = requestAnimationFrame(tick); else nextStory();
+                    })(start);
+                }
+                function stopStory() {
+                    if (raf) cancelAnimationFrame(raf);
+                    raf = null;
+                    var vid = $('igStoryVideo');
+                    vid.pause();
+                    vid.hidden = true;
+                    vid.removeAttribute('src');
+                    vid.load();
+                }
+                function nextStory() { if (si < list.length - 1) { si++; showStory(); } else closeAll(); }
+                function prevStory() { if (si > 0) si--; showStory(); }
+                $('igStoryNext').addEventListener('click', nextStory);
+                $('igStoryPrev').addEventListener('click', prevStory);
+                $('igAvatar').addEventListener('click', function () {
+                    openStory(ALL_STORIES, '');
+                    $('igAvatarRing').classList.add('seen');
+                });
+
+                $('igFollow').addEventListener('click', function () {
+                    var f = this.textContent === 'Seguir';
+                    this.textContent = f ? 'Seguindo' : 'Seguir';
+                    this.classList.toggle('primary', !f);
+                });
+
+                document.addEventListener('keydown', function (e) {
+                    if (!modal.hidden) {
+                        if (e.key === 'Escape') closeAll();
+                        if (e.key === 'ArrowRight') $('igNext').click();
+                        if (e.key === 'ArrowLeft') $('igPrev').click();
+                    } else if (!$('igStory').hidden) {
+                        if (e.key === 'Escape') closeAll();
+                        if (e.key === 'ArrowRight') nextStory();
+                        if (e.key === 'ArrowLeft') prevStory();
+                    }
+                });
+            })();
+            </script>
+        </article>
+    </div>
+</main>
+
+<script src="main.js"></script>
+
+  <footer class="footer-text">
+	<a href="https://harizetamara.com" target="_blank" style="text-decoration: none; color: inherit;"> 
+		Desenvolvido por Harize Tamara &copy; 2025
+	  </a>
+  </footer>
+
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script src="toggle-theme.js"></script>
+</body>
+</html>

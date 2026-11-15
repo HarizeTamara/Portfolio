@@ -1549,9 +1549,10 @@
       body::-webkit-scrollbar-track { background: none; }
   
       body::-webkit-scrollbar-thumb {
-          border: 5px solid var(--smoky-black);
+          border: 5px solid transparent;
           background: var(--stroke);
-          border-radius: 20px;;
+          background-clip: padding-box;
+          border-radius: 20px;
       }
   
       body::-webkit-scrollbar-thumb:hover { background: hsla(0, 0%, 100%, 0.15); }

@@ -7,7 +7,7 @@ const elementToggleFunc = function (elem) { elem.classList.toggle("active"); }
 const sidebar = document.querySelector("[data-sidebar]");
 const sidebarBtn = document.querySelector("[data-sidebar-btn]");
 
-sidebarBtn.addEventListener("click", function() {elementToggleFunc(sidebar); })
+sidebarBtn?.addEventListener("click", function() {elementToggleFunc(sidebar); })
 
 //Activating Modal-testimonial
 
@@ -56,8 +56,8 @@ for (let i = 0; i < testimonialsItem.length; i++) {
   
 //Ativando o botão fechar no modal-testimonial
 
-modalCloseBtn.addEventListener('click', testimonialsModalFunc);
-overlay.addEventListener('click', testimonialsModalFunc);
+modalCloseBtn?.addEventListener('click', testimonialsModalFunc);
+overlay?.addEventListener('click', testimonialsModalFunc);
 
 //Habilitando seleção de filtros e opções de filtragem (portfolio)
 //data-select: Controla o dropdown para selecionar categorias.
@@ -71,7 +71,7 @@ const selectItems = document.querySelectorAll('[data-select-item]');
 const selectValue = document.querySelector('[data-select-value]');
 const filterBtn = document.querySelectorAll('[data-filter-btn]'); 
 
-select.addEventListener('click', function () {elementToggleFunc(this); });
+select?.addEventListener('click', function () {elementToggleFunc(this); });
 
 for(let i = 0; i < selectItems.length; i++) {
     selectItems[i].addEventListener('click', function() {
@@ -132,26 +132,39 @@ for(let i = 0; i < formInputs.length; i++) {
 const navigationLinks = document.querySelectorAll('[data-nav-link]');
 const pages = document.querySelectorAll('[data-page]');
 
+// Mostra a seção (article) correspondente e marca o botão do menu
+function showPage(targetPage) {
+  const article = document.querySelector(`article[data-page="${targetPage}"]`);
+  if (!article) return false;
+
+  pages.forEach((page) => {
+    page.classList.toggle("active", page.dataset.page === targetPage);
+  });
+  navigationLinks.forEach((nav) => {
+    nav.classList.toggle("active", nav.dataset.page === targetPage);
+  });
+  return true;
+}
+
 navigationLinks.forEach((link) => {
   link.addEventListener("click", () => {
     const targetPage = link.getAttribute("data-page"); // Use o atributo data-page
 
-    pages.forEach((page) => {
-      if (page.dataset.page === targetPage) {
-        page.classList.add("active");
-      } else {
-        page.classList.remove("active");
-      }
-    });
-
-    navigationLinks.forEach((nav) => nav.classList.remove("active"));
-    link.classList.add("active");
+    // Se a seção não existe nesta página (ex.: gazzoni.html), vai para o index na seção certa
+    if (!showPage(targetPage)) {
+      window.location.href = `index.html#${targetPage}`;
+      return;
+    }
+    history.replaceState(null, "", `#${targetPage}`);
   });
 });
 
+// Ao abrir com #seção na URL (ex.: index.html#portfolio), abre direto nessa seção
+if (location.hash) showPage(location.hash.slice(1));
+
 // Formulário
 
-document.querySelector('.form').addEventListener('submit', function (event) {
+document.querySelector('.form')?.addEventListener('submit', function (event) {
     event.preventDefault(); // Impede o envio padrão do formulário
 
     const formData = new FormData(this);
